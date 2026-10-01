@@ -11,4 +11,5 @@ void RedNoiseRenderer::draw(DrawingWindow &window) {
 			window.setPixelColour(x, y, colour);
 		}
 	}
+
 }

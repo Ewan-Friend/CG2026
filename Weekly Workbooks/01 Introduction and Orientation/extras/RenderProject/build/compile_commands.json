@@ -1,0 +1,80 @@
+[
+{
+  "directory": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/build",
+  "command": "/usr/bin/c++  -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/glm-0.9.7.2\" -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw\" -isystem /usr/include/SDL2 -g -std=gnu++11 -Wall -Wextra -Wcast-align -Wfatal-errors -Werror=return-type -Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -O2 -fno-omit-frame-pointer -g -o CMakeFiles/RenderProject.dir/libs/sdw/CanvasPoint.cpp.o -c \"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw/CanvasPoint.cpp\"",
+  "file": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw/CanvasPoint.cpp",
+  "output": "CMakeFiles/RenderProject.dir/libs/sdw/CanvasPoint.cpp.o"
+},
+{
+  "directory": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/build",
+  "command": "/usr/bin/c++  -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/glm-0.9.7.2\" -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw\" -isystem /usr/include/SDL2 -g -std=gnu++11 -Wall -Wextra -Wcast-align -Wfatal-errors -Werror=return-type -Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -O2 -fno-omit-frame-pointer -g -o CMakeFiles/RenderProject.dir/libs/sdw/CanvasTriangle.cpp.o -c \"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw/CanvasTriangle.cpp\"",
+  "file": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw/CanvasTriangle.cpp",
+  "output": "CMakeFiles/RenderProject.dir/libs/sdw/CanvasTriangle.cpp.o"
+},
+{
+  "directory": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/build",
+  "command": "/usr/bin/c++  -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/glm-0.9.7.2\" -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw\" -isystem /usr/include/SDL2 -g -std=gnu++11 -Wall -Wextra -Wcast-align -Wfatal-errors -Werror=return-type -Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -O2 -fno-omit-frame-pointer -g -o CMakeFiles/RenderProject.dir/libs/sdw/Colour.cpp.o -c \"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw/Colour.cpp\"",
+  "file": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw/Colour.cpp",
+  "output": "CMakeFiles/RenderProject.dir/libs/sdw/Colour.cpp.o"
+},
+{
+  "directory": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/build",
+  "command": "/usr/bin/c++  -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/glm-0.9.7.2\" -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw\" -isystem /usr/include/SDL2 -g -std=gnu++11 -Wall -Wextra -Wcast-align -Wfatal-errors -Werror=return-type -Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -O2 -fno-omit-frame-pointer -g -o CMakeFiles/RenderProject.dir/libs/sdw/DrawingWindow.cpp.o -c \"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw/DrawingWindow.cpp\"",
+  "file": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw/DrawingWindow.cpp",
+  "output": "CMakeFiles/RenderProject.dir/libs/sdw/DrawingWindow.cpp.o"
+},
+{
+  "directory": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/build",
+  "command": "/usr/bin/c++  -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/glm-0.9.7.2\" -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw\" -isystem /usr/include/SDL2 -g -std=gnu++11 -Wall -Wextra -Wcast-align -Wfatal-errors -Werror=return-type -Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -O2 -fno-omit-frame-pointer -g -o CMakeFiles/RenderProject.dir/libs/sdw/ModelTriangle.cpp.o -c \"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw/ModelTriangle.cpp\"",
+  "file": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw/ModelTriangle.cpp",
+  "output": "CMakeFiles/RenderProject.dir/libs/sdw/ModelTriangle.cpp.o"
+},
+{
+  "directory": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/build",
+  "command": "/usr/bin/c++  -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/glm-0.9.7.2\" -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw\" -isystem /usr/include/SDL2 -g -std=gnu++11 -Wall -Wextra -Wcast-align -Wfatal-errors -Werror=return-type -Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -O2 -fno-omit-frame-pointer -g -o CMakeFiles/RenderProject.dir/libs/sdw/RayTriangleIntersection.cpp.o -c \"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw/RayTriangleIntersection.cpp\"",
+  "file": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw/RayTriangleIntersection.cpp",
+  "output": "CMakeFiles/RenderProject.dir/libs/sdw/RayTriangleIntersection.cpp.o"
+},
+{
+  "directory": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/build",
+  "command": "/usr/bin/c++  -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/glm-0.9.7.2\" -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw\" -isystem /usr/include/SDL2 -g -std=gnu++11 -Wall -Wextra -Wcast-align -Wfatal-errors -Werror=return-type -Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -O2 -fno-omit-frame-pointer -g -o CMakeFiles/RenderProject.dir/libs/sdw/TextureMap.cpp.o -c \"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw/TextureMap.cpp\"",
+  "file": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw/TextureMap.cpp",
+  "output": "CMakeFiles/RenderProject.dir/libs/sdw/TextureMap.cpp.o"
+},
+{
+  "directory": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/build",
+  "command": "/usr/bin/c++  -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/glm-0.9.7.2\" -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw\" -isystem /usr/include/SDL2 -g -std=gnu++11 -Wall -Wextra -Wcast-align -Wfatal-errors -Werror=return-type -Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -O2 -fno-omit-frame-pointer -g -o CMakeFiles/RenderProject.dir/libs/sdw/TexturePoint.cpp.o -c \"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw/TexturePoint.cpp\"",
+  "file": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw/TexturePoint.cpp",
+  "output": "CMakeFiles/RenderProject.dir/libs/sdw/TexturePoint.cpp.o"
+},
+{
+  "directory": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/build",
+  "command": "/usr/bin/c++  -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/glm-0.9.7.2\" -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw\" -isystem /usr/include/SDL2 -g -std=gnu++11 -Wall -Wextra -Wcast-align -Wfatal-errors -Werror=return-type -Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -O2 -fno-omit-frame-pointer -g -o CMakeFiles/RenderProject.dir/libs/sdw/Utils.cpp.o -c \"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw/Utils.cpp\"",
+  "file": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw/Utils.cpp",
+  "output": "CMakeFiles/RenderProject.dir/libs/sdw/Utils.cpp.o"
+},
+{
+  "directory": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/build",
+  "command": "/usr/bin/c++  -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/glm-0.9.7.2\" -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw\" -isystem /usr/include/SDL2 -g -std=gnu++11 -Wall -Wextra -Wcast-align -Wfatal-errors -Werror=return-type -Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -O2 -fno-omit-frame-pointer -g -o CMakeFiles/RenderProject.dir/src/ColourSpectrumRenderer.cpp.o -c \"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/src/ColourSpectrumRenderer.cpp\"",
+  "file": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/src/ColourSpectrumRenderer.cpp",
+  "output": "CMakeFiles/RenderProject.dir/src/ColourSpectrumRenderer.cpp.o"
+},
+{
+  "directory": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/build",
+  "command": "/usr/bin/c++  -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/glm-0.9.7.2\" -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw\" -isystem /usr/include/SDL2 -g -std=gnu++11 -Wall -Wextra -Wcast-align -Wfatal-errors -Werror=return-type -Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -O2 -fno-omit-frame-pointer -g -o CMakeFiles/RenderProject.dir/src/MainApplication.cpp.o -c \"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/src/MainApplication.cpp\"",
+  "file": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/src/MainApplication.cpp",
+  "output": "CMakeFiles/RenderProject.dir/src/MainApplication.cpp.o"
+},
+{
+  "directory": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/build",
+  "command": "/usr/bin/c++  -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/glm-0.9.7.2\" -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw\" -isystem /usr/include/SDL2 -g -std=gnu++11 -Wall -Wextra -Wcast-align -Wfatal-errors -Werror=return-type -Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -O2 -fno-omit-frame-pointer -g -o CMakeFiles/RenderProject.dir/src/RedNoiseRenderer.cpp.o -c \"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/src/RedNoiseRenderer.cpp\"",
+  "file": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/src/RedNoiseRenderer.cpp",
+  "output": "CMakeFiles/RenderProject.dir/src/RedNoiseRenderer.cpp.o"
+},
+{
+  "directory": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/build",
+  "command": "/usr/bin/c++  -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/glm-0.9.7.2\" -I\"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/libs/sdw\" -isystem /usr/include/SDL2 -g -std=gnu++11 -Wall -Wextra -Wcast-align -Wfatal-errors -Werror=return-type -Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -O2 -fno-omit-frame-pointer -g -o CMakeFiles/RenderProject.dir/src/Renderer.cpp.o -c \"/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/src/Renderer.cpp\"",
+  "file": "/home/pingo/Documents/university/CG2026/Weekly Workbooks/01 Introduction and Orientation/extras/RenderProject/src/Renderer.cpp",
+  "output": "CMakeFiles/RenderProject.dir/src/Renderer.cpp.o"
+}
+]

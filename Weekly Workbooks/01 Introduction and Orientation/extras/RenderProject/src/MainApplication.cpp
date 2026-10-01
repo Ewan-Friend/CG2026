@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "RedNoiseRenderer.h"
+#include "BlueNoiseRenderer.h"
 #include "ColourSpectrumRenderer.h"
 #include <fstream>
 #include <vector>
@@ -9,8 +10,12 @@ extern const int WIDTH = 320;
 extern const int HEIGHT = 240;
 
 DrawingWindow window = DrawingWindow(WIDTH, HEIGHT);
+
 RedNoiseRenderer redNoise = RedNoiseRenderer();
-Renderer* currentRenderer = &redNoise;
+BlueNoiseRenderer blueNoise = BlueNoiseRenderer();
+ColourSpectrumRenderer colourSpectrum = ColourSpectrumRenderer();
+
+Renderer* currentRenderer = &colourSpectrum;
 bool savingFrames = false;
 int frameCounter = 0;
 
@@ -29,10 +34,12 @@ void handleEvent(SDL_Event event, DrawingWindow &window) {
 		else if (event.key.keysym.sym == SDLK_DOWN) std::cout << "DOWN" << std::endl;
 		else if (event.key.keysym.sym == SDLK_u) std::cout << "U" << std::endl;
 		else if (event.key.keysym.sym == SDLK_f) std::cout << "F" << std::endl;
+        else if (event.key.keysym.sym == SDLK_b) currentRenderer = &blueNoise; 
 		else if (event.key.keysym.sym == SDLK_TAB) savingFrames = !savingFrames;
 		else if (event.key.keysym.sym == SDLK_RETURN) window.toggleFullscreen();
 	}
 }
+
 
 int main(int argc, char *argv[]) {
 	SDL_Event event;
