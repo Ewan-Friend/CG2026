@@ -1,19 +1,51 @@
 #include "ColourSpectrumRenderer.h"
+#include "Renderer.h"
+#include "Utils.h"
 #include "glm/detail/type_vec.hpp"
 #include <cstdio>
 #include <vector>
 
 void ColourSpectrumRenderer::draw(DrawingWindow &window) {
     window.clearPixels();
+
+//    glm::vec3 topLeft(255, 0, 0);        // red 
+//    glm::vec3 topRight(0, 0, 255);       // blue 
+//    glm::vec3 bottomRight(0, 255, 0);    // green 
+//    glm::vec3 bottomLeft(255, 255, 0);   // yellow
+
+    glm::vec2 bottomLeft_(0, HEIGHT);
+    glm::vec2 bottomRight_(WIDTH, HEIGHT);
+    glm::vec2 topMiddle_(WIDTH / 2, 0);
+
     // Write some drawing code in here !
-    std::vector<float> nums = ColourSpectrumRenderer::interpolateSingleFloats(255, 0, WIDTH);
-    std::vector<glm::vec3> vecs = ColourSpectrumRenderer::interpolateThreeElementValues(glm::vec3(223, 255 ,0), glm::vec3(227, 66, 52), WIDTH);
+//    std::vector<glm::vec3> leftCol = ColourSpectrumRenderer::interpolateThreeElementValues(topLeft, bottomLeft, HEIGHT);
+//    std::vector<glm::vec3> rightCol = ColourSpectrumRenderer::interpolateThreeElementValues(topRight, bottomRight, HEIGHT);
 
 	for (size_t y = 0; y < window.height; y++) {
-		for (size_t x = 0; x < window.width; x++) {
-			float red = (vecs[x])[0];
-			float green = (vecs[x])[1];
-			float blue = (vecs[x])[2];
+//        std::vector<glm::vec3> row = ColourSpectrumRenderer::interpolateThreeElementValues(leftCol[y],  rightCol[y], WIDTH);
+		for (size_t x = 0; x < window.width; x++) {     
+            glm::vec2 point(x, y);
+            glm::vec3 barry = convertToBarycentricCoordinates(bottomLeft_, bottomRight_, topMiddle_, point); 
+
+            float u = barry[0];
+            float v = barry[1];
+            float w = barry[2];
+
+            float red = 0;
+            float green = 0;
+            float blue = 0;
+
+            if (w >= 0 && u >= 0 && v >= 0){;
+                red = (w * 255);
+                green = (v * 255);
+                blue = (u * 255);
+            }
+            else {
+                red = (rand() % 256) * w;
+                green = (rand() % 256) * w;
+                blue = (rand() % 256) * w;
+            }
+
 			uint32_t colour = (255 << 24) + (int(red) << 16) + (int(green) << 8) + int(blue);
 			window.setPixelColour(x, y, colour);
 		}
