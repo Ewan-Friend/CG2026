@@ -5,6 +5,7 @@
 #include "ColourSpectrumRenderer.h"
 #include "RasterisedRenderer.h"
 #include <fstream>
+#include <iostream>
 #include <vector>
 
 // Define globals for WIDTH and HEIGHT of the window (can be accessed from any renderer)
@@ -35,9 +36,20 @@ void handleEvent(SDL_Event event, DrawingWindow &window) {
 		else if (event.key.keysym.sym == SDLK_RIGHT) std::cout << "RIGHT" << std::endl;
 		else if (event.key.keysym.sym == SDLK_UP) std::cout << "UP" << std::endl;
 		else if (event.key.keysym.sym == SDLK_DOWN) std::cout << "DOWN" << std::endl;
-		else if (event.key.keysym.sym == SDLK_u) std::cout << "U" << std::endl;
-		else if (event.key.keysym.sym == SDLK_f) std::cout << "F" << std::endl;
-        else if (event.key.keysym.sym == SDLK_b) currentRenderer = &blueNoise; 
+		else if (event.key.keysym.sym == SDLK_u) {
+            CanvasPoint v1((rand() % WIDTH), (rand() % HEIGHT));
+            CanvasPoint v2((rand() % WIDTH), (rand() % HEIGHT));
+            CanvasPoint v3((rand() % WIDTH), (rand() % HEIGHT));
+            Colour c((rand() % 256), (rand() % 256), (rand() % 256));
+            RasterisedRenderer::createTriangle(CanvasTriangle(v1, v2, v3), c, window);
+        }
+		else if (event.key.keysym.sym == SDLK_f) {
+            CanvasPoint v1((rand() % WIDTH), (rand() % HEIGHT));
+            CanvasPoint v2((rand() % WIDTH), (rand() % HEIGHT));
+            CanvasPoint v3((rand() % WIDTH), (rand() % HEIGHT));
+            Colour c((rand() % 256), (rand() % 256), (rand() % 256));
+            RasterisedRenderer::createFilled(CanvasTriangle(v1, v2, v3), c, window);
+        } 
 		else if (event.key.keysym.sym == SDLK_TAB) savingFrames = !savingFrames;
 		else if (event.key.keysym.sym == SDLK_RETURN) window.toggleFullscreen();
 	}
