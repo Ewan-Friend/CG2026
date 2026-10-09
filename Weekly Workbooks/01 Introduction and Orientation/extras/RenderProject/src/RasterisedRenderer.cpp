@@ -98,7 +98,9 @@ static void texLine(CanvasPoint from,    CanvasPoint to,
        if (texx < 0 || texx >= (int)Image.width  ||
             texy < 0 || texy >= (int)Image.height ||
             x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT) continue;
-        window.setPixelColour(x, y, Image.pixels[texy * Image.width + texx]);
+        uint32_t colour = Image.pixels[texy * Image.width + texx];
+        uint32_t invert_colour = colour ^ 0x00FFFFFF;
+        window.setPixelColour(x, y, colour);
     }
 }
 
@@ -155,7 +157,7 @@ void RasterisedRenderer::createFilled(CanvasTriangle tri, Colour c, DrawingWindo
 
 
 void RasterisedRenderer::createTexture(CanvasTriangle tri, CanvasTriangle tex, DrawingWindow &window){
-    TextureMap Image("./random1.ppm");
+    TextureMap Image("./texture.ppm");
 
     if (tri.v0().y > tri.v1().y) {
         std::swap(tri.v0(), tri.v1()); 
