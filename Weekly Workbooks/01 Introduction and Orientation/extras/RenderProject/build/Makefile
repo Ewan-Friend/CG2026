@@ -345,6 +345,30 @@ libs/sdw/Utils.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/RenderProject.dir/build.make CMakeFiles/RenderProject.dir/libs/sdw/Utils.cpp.s
 .PHONY : libs/sdw/Utils.cpp.s
 
+src/BlueNoiseRenderer.o: src/BlueNoiseRenderer.cpp.o
+.PHONY : src/BlueNoiseRenderer.o
+
+# target to build an object file
+src/BlueNoiseRenderer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RenderProject.dir/build.make CMakeFiles/RenderProject.dir/src/BlueNoiseRenderer.cpp.o
+.PHONY : src/BlueNoiseRenderer.cpp.o
+
+src/BlueNoiseRenderer.i: src/BlueNoiseRenderer.cpp.i
+.PHONY : src/BlueNoiseRenderer.i
+
+# target to preprocess a source file
+src/BlueNoiseRenderer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RenderProject.dir/build.make CMakeFiles/RenderProject.dir/src/BlueNoiseRenderer.cpp.i
+.PHONY : src/BlueNoiseRenderer.cpp.i
+
+src/BlueNoiseRenderer.s: src/BlueNoiseRenderer.cpp.s
+.PHONY : src/BlueNoiseRenderer.s
+
+# target to generate assembly for a file
+src/BlueNoiseRenderer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RenderProject.dir/build.make CMakeFiles/RenderProject.dir/src/BlueNoiseRenderer.cpp.s
+.PHONY : src/BlueNoiseRenderer.cpp.s
+
 src/ColourSpectrumRenderer.o: src/ColourSpectrumRenderer.cpp.o
 .PHONY : src/ColourSpectrumRenderer.o
 
@@ -392,6 +416,78 @@ src/MainApplication.s: src/MainApplication.cpp.s
 src/MainApplication.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/RenderProject.dir/build.make CMakeFiles/RenderProject.dir/src/MainApplication.cpp.s
 .PHONY : src/MainApplication.cpp.s
+
+src/ModelRenderer.o: src/ModelRenderer.cpp.o
+.PHONY : src/ModelRenderer.o
+
+# target to build an object file
+src/ModelRenderer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RenderProject.dir/build.make CMakeFiles/RenderProject.dir/src/ModelRenderer.cpp.o
+.PHONY : src/ModelRenderer.cpp.o
+
+src/ModelRenderer.i: src/ModelRenderer.cpp.i
+.PHONY : src/ModelRenderer.i
+
+# target to preprocess a source file
+src/ModelRenderer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RenderProject.dir/build.make CMakeFiles/RenderProject.dir/src/ModelRenderer.cpp.i
+.PHONY : src/ModelRenderer.cpp.i
+
+src/ModelRenderer.s: src/ModelRenderer.cpp.s
+.PHONY : src/ModelRenderer.s
+
+# target to generate assembly for a file
+src/ModelRenderer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RenderProject.dir/build.make CMakeFiles/RenderProject.dir/src/ModelRenderer.cpp.s
+.PHONY : src/ModelRenderer.cpp.s
+
+src/ObjParser.o: src/ObjParser.cpp.o
+.PHONY : src/ObjParser.o
+
+# target to build an object file
+src/ObjParser.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RenderProject.dir/build.make CMakeFiles/RenderProject.dir/src/ObjParser.cpp.o
+.PHONY : src/ObjParser.cpp.o
+
+src/ObjParser.i: src/ObjParser.cpp.i
+.PHONY : src/ObjParser.i
+
+# target to preprocess a source file
+src/ObjParser.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RenderProject.dir/build.make CMakeFiles/RenderProject.dir/src/ObjParser.cpp.i
+.PHONY : src/ObjParser.cpp.i
+
+src/ObjParser.s: src/ObjParser.cpp.s
+.PHONY : src/ObjParser.s
+
+# target to generate assembly for a file
+src/ObjParser.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RenderProject.dir/build.make CMakeFiles/RenderProject.dir/src/ObjParser.cpp.s
+.PHONY : src/ObjParser.cpp.s
+
+src/RasterisedRenderer.o: src/RasterisedRenderer.cpp.o
+.PHONY : src/RasterisedRenderer.o
+
+# target to build an object file
+src/RasterisedRenderer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RenderProject.dir/build.make CMakeFiles/RenderProject.dir/src/RasterisedRenderer.cpp.o
+.PHONY : src/RasterisedRenderer.cpp.o
+
+src/RasterisedRenderer.i: src/RasterisedRenderer.cpp.i
+.PHONY : src/RasterisedRenderer.i
+
+# target to preprocess a source file
+src/RasterisedRenderer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RenderProject.dir/build.make CMakeFiles/RenderProject.dir/src/RasterisedRenderer.cpp.i
+.PHONY : src/RasterisedRenderer.cpp.i
+
+src/RasterisedRenderer.s: src/RasterisedRenderer.cpp.s
+.PHONY : src/RasterisedRenderer.s
+
+# target to generate assembly for a file
+src/RasterisedRenderer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RenderProject.dir/build.make CMakeFiles/RenderProject.dir/src/RasterisedRenderer.cpp.s
+.PHONY : src/RasterisedRenderer.cpp.s
 
 src/RedNoiseRenderer.o: src/RedNoiseRenderer.cpp.o
 .PHONY : src/RedNoiseRenderer.o
@@ -477,12 +573,24 @@ help:
 	@echo "... libs/sdw/Utils.o"
 	@echo "... libs/sdw/Utils.i"
 	@echo "... libs/sdw/Utils.s"
+	@echo "... src/BlueNoiseRenderer.o"
+	@echo "... src/BlueNoiseRenderer.i"
+	@echo "... src/BlueNoiseRenderer.s"
 	@echo "... src/ColourSpectrumRenderer.o"
 	@echo "... src/ColourSpectrumRenderer.i"
 	@echo "... src/ColourSpectrumRenderer.s"
 	@echo "... src/MainApplication.o"
 	@echo "... src/MainApplication.i"
 	@echo "... src/MainApplication.s"
+	@echo "... src/ModelRenderer.o"
+	@echo "... src/ModelRenderer.i"
+	@echo "... src/ModelRenderer.s"
+	@echo "... src/ObjParser.o"
+	@echo "... src/ObjParser.i"
+	@echo "... src/ObjParser.s"
+	@echo "... src/RasterisedRenderer.o"
+	@echo "... src/RasterisedRenderer.i"
+	@echo "... src/RasterisedRenderer.s"
 	@echo "... src/RedNoiseRenderer.o"
 	@echo "... src/RedNoiseRenderer.i"
 	@echo "... src/RedNoiseRenderer.s"

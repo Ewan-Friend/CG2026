@@ -176,7 +176,11 @@
 				9,
 				10,
 				11,
-				12
+				12,
+				13,
+				14,
+				15,
+				16
 			]
 		}
 	],
@@ -247,7 +251,11 @@
 				9,
 				10,
 				11,
-				12
+				12,
+				13,
+				14,
+				15,
+				16
 			]
 		}
 	],
@@ -350,6 +358,16 @@
 				1
 			],
 			"compileGroupIndex" : 0,
+			"path" : "src/BlueNoiseRenderer.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"backtraces" : 
+			[
+				1
+			],
+			"compileGroupIndex" : 0,
 			"path" : "src/ColourSpectrumRenderer.cpp",
 			"sourceGroupIndex" : 0
 		},
@@ -361,6 +379,36 @@
 			],
 			"compileGroupIndex" : 0,
 			"path" : "src/MainApplication.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"backtraces" : 
+			[
+				1
+			],
+			"compileGroupIndex" : 0,
+			"path" : "src/ModelRenderer.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"backtraces" : 
+			[
+				1
+			],
+			"compileGroupIndex" : 0,
+			"path" : "src/ObjParser.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"backtraces" : 
+			[
+				1
+			],
+			"compileGroupIndex" : 0,
+			"path" : "src/RasterisedRenderer.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
