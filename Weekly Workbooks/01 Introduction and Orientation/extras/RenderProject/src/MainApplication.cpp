@@ -14,10 +14,10 @@
 #include <vector>
 
 // Define globals for WIDTH and HEIGHT of the window (can be accessed from any renderer)
-extern const int WIDTH = 320;
-extern const int HEIGHT = 240;
+extern const int WIDTH = 640;
+extern const int HEIGHT = 480;
+extern const std::string WORKBOOK = "../../../";
 
-const std::string WORKBOOK = "../../../";
 DrawingWindow window = DrawingWindow(WIDTH, HEIGHT);
 
 RedNoiseRenderer redNoise = RedNoiseRenderer();
@@ -64,8 +64,6 @@ void handleEvent(SDL_Event event, DrawingWindow &window) {
 
 
 int main(int argc, char *argv[]) {
-    std::unordered_map<std::string, Colour> pallete = parseMat(std::string(WORKBOOK) + "04 Wireframes and Rasterising/models/cornell-box.mtl");
-    parseObj(triangles, std::string(WORKBOOK) + "04 Wireframes and Rasterising/models/cornell-box.obj", pallete);
 	SDL_Event event;
 	while (true) {
 		// We MUST poll for events - otherwise the window will freeze !

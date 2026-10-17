@@ -1,29 +1,25 @@
 #include "RasterisedRenderer.h"
 #include "DrawingWindow.h"
+#include "Renderer.h"
 #include "TextureMap.h"
 #include <CanvasPoint.h>
 #include <Colour.h>
 #include <cmath>
 #include <cstdint>
 #include <utility>
+#include <vector>
+#include <algorithm>
 
 Colour WHITE("White", 255, 255, 255);
+static std::vector<float> depthBuffer(WIDTH * HEIGHT, 0.0f);
 
 void RasterisedRenderer::draw(DrawingWindow &window) {
-    // Write some drawing code in here !
-    // Colour forestGreen("Forest Green", 34, 139, 34);
-    // Colour white("White", 255, 255, 255);
-
-    // CanvasPoint v1((rand() % WIDTH), (rand() % HEIGHT));
-    // CanvasPoint v2((rand() % WIDTH), (rand() % HEIGHT));
-    // CanvasPoint v3((rand() % WIDTH), (rand() % HEIGHT));
-    // Colour c((rand() % 256), (rand() % 256), (rand() % 256));
-    // RasterisedRenderer::createTriangle(CanvasTriangle(v1, v2, v3), c, window);
-
     window.clearPixels();
-    CanvasTriangle tri(CanvasPoint(160, 10), CanvasPoint(300, 230), CanvasPoint(10, 150));
-    CanvasTriangle tex(CanvasPoint(195, 5),  CanvasPoint(395, 380), CanvasPoint(65, 330));
-    RasterisedRenderer::createTexture(tri, tex, window);
+    std::fill(depthBuffer.begin(), depthBuffer.end(), 0.0f);
+
+    // CanvasTriangle tri(CanvasPoint(160, 10), CanvasPoint(300, 230), CanvasPoint(10, 150));
+    // CanvasTriangle tex(CanvasPoint(195, 5),  CanvasPoint(395, 380), CanvasPoint(65, 330));
+    // RasterisedRenderer::createTexture(tri, tex, window);
 }
 
 
@@ -32,13 +28,23 @@ void RasterisedRenderer::createLine(CanvasPoint from, CanvasPoint to, Colour c, 
 
     float xDiff = to.x - from.x;
     float yDiff = to.y - from.y;
-    float numSteps = std::max(abs(xDiff), abs(yDiff));
+    float zDiff = to.depth - from.depth;
+
+    float numSteps = std::max(1.0f, std::ceil(std::max(std::abs(xDiff), std::abs(yDiff))));
     float xStep = xDiff/numSteps;
     float yStep = yDiff/numSteps;
+    float zStep = zDiff/numSteps;
+
     for (float i = 0.0; i<=numSteps; i++){
-        float x = from.x + (xStep*i);
-        float y = from.y + (yStep*i);
-        window.setPixelColour(std::round(x), round(y), colour);
+        float x = std::round(from.x + (xStep*i));
+        float y = std::round(from.y + (yStep*i));
+        float z = from.depth + (zStep * i);
+
+        if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT) continue;
+        if (z > depthBuffer[y * WIDTH + x]){
+            depthBuffer[y * WIDTH + x] = z;
+            window.setPixelColour(x, y, colour);
+        }
     }
 }
 
@@ -58,9 +64,17 @@ static void fillFlat(CanvasPoint tip, CanvasPoint a, CanvasPoint b, Colour c, Dr
 
     for (int y = startY; ; y += dir) {
         float prog = (y - tip.y) / height;
+
         float a_ = tip.x + prog * (a.x - tip.x);
         float b_ = tip.x + prog * (b.x - tip.x);
-        RasterisedRenderer::createLine(CanvasPoint(a_, y), CanvasPoint(b_, y), c, window);
+
+        CanvasPoint Left(a_, y);
+        CanvasPoint Right(b_, y);
+
+        Left.depth = tip.depth + prog * (a.depth - tip.depth);
+        Right.depth = tip.depth + prog * (b.depth - tip.depth);
+
+        RasterisedRenderer::createLine(Left, Right, c, window);
         if (y == endY) break;
     }
 }
@@ -147,12 +161,15 @@ void RasterisedRenderer::createFilled(CanvasTriangle tri, Colour c, DrawingWindo
 
     float tri_ratio = (tri.v1().y - tri.v0().y) / (tri.v2().y - tri.v0().y);
 
+    if (tri.v2().y - tri.v0().y == 0) return;
+
     CanvasPoint mid( tri.v0().x + tri_ratio * (tri.v2().x - tri.v0().x), tri.v1().y ); 
+    mid.depth = tri.v0().depth + tri_ratio * (tri.v2().depth - tri.v0().depth);
 
     fillFlat(tri.v0(), tri.v1(), mid, c, window);
     fillFlat(tri.v2(), tri.v1(), mid, c, window);
 
-    createTriangle(tri, WHITE, window);
+    // createTriangle(tri, WHITE, window);
 }
 
 

@@ -9,9 +9,13 @@
 #include <string>
 #include <unordered_map>
 
-std::vector<ModelTriangle> parseObj(std::vector<ModelTriangle> &triangles, const std::string &filename, std::unordered_map<std::string, Colour> pallete){
+std::vector<ModelTriangle> parseObj(const std::string &filename, std::unordered_map<std::string, Colour> pallete){
+
+    std::vector<ModelTriangle> triangles;
     std::string line;
     std::vector<glm::vec3> vertices;
+    Colour colour;
+
     std::ifstream ObjFile(filename);
 
     const float scale_factor = 0.35;
@@ -19,7 +23,6 @@ std::vector<ModelTriangle> parseObj(std::vector<ModelTriangle> &triangles, const
     while (std::getline(ObjFile, line)){
         std::istringstream ss(line);
         std::string token;
-        Colour colour;
         ss >> token;
         if (token.empty()) continue;
 
