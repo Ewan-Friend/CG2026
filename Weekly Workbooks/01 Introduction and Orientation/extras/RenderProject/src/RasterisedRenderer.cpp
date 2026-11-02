@@ -63,8 +63,7 @@ static void fillFlat(CanvasPoint tip, CanvasPoint a, CanvasPoint b, Colour c, Dr
     int dir = (endY - startY > 0) ? 1 : -1;
 
     for (int y = startY; ; y += dir) {
-        float prog = (y - tip.y) / height;
-
+        float prog = std::max(0.0f, std::min(1.0f, (y - tip.y) / height));
         float a_ = tip.x + prog * (a.x - tip.x);
         float b_ = tip.x + prog * (b.x - tip.x);
 
@@ -200,4 +199,8 @@ void RasterisedRenderer::createTexture(CanvasTriangle tri, CanvasTriangle tex, D
     texFillFlat(tri.v2(), tri.v1(), tri_mid, tex.v2(), tex.v1(), tex_mid, Image, window);
 
     createTriangle(tri, WHITE, window);
+}
+
+void RasterisedRenderer::clearDepth() {
+    std::fill(depthBuffer.begin(), depthBuffer.end(), 0.0f);
 }

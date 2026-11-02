@@ -13,4 +13,5 @@ class RasterisedRenderer: public Renderer {
         static void createTriangle(CanvasTriangle tri, Colour color, DrawingWindow &window);
         static void createFilled(CanvasTriangle tri, Colour color, DrawingWindow &window);
         static void createTexture(CanvasTriangle tri, CanvasTriangle tex, DrawingWindow &window);
+        static void clearDepth();
 };
