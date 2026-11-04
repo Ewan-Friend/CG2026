@@ -44,8 +44,6 @@ std::vector<ModelTriangle> parseObj(const std::string &filename, std::unordered_
             int ci = std::stoi(c.substr(0, c.find("/"))) - 1;
             ModelTriangle tri(vertices[ai], vertices[bi], vertices[ci], colour);
             triangles.push_back(tri);
-
-            std::cout << tri;
         }
     }
 

@@ -5,8 +5,9 @@
 #include "BlueNoiseRenderer.h"
 #include "ColourSpectrumRenderer.h"
 #include "RasterisedRenderer.h"
-#include "ObjParser.h"
 #include "ModelRenderer.h"
+#include "RaytraceRenderer.h"
+#include "Camera.h"
 #include "glm/detail/func_trigonometric.hpp"
 #include "glm/detail/type_vec.hpp"
 #include <SDL_keycode.h>
@@ -17,19 +18,21 @@
 #include <vector>
 
 // Define globals for WIDTH and HEIGHT of the window (can be accessed from any renderer)
-extern const int WIDTH = 640;
-extern const int HEIGHT = 480;
+extern const int WIDTH = 320;
+extern const int HEIGHT = 240;
 extern const std::string WORKBOOK = "../../../";
 
 DrawingWindow window = DrawingWindow(WIDTH, HEIGHT);
+Camera camera;
 
 RedNoiseRenderer redNoise = RedNoiseRenderer();
 BlueNoiseRenderer blueNoise = BlueNoiseRenderer();
 ColourSpectrumRenderer colourSpectrum = ColourSpectrumRenderer();
 RasterisedRenderer rasterisedRenderer = RasterisedRenderer();
-ModelRenderer modelRenderer = ModelRenderer();
+ModelRenderer modelRenderer = ModelRenderer(camera);
+RaytraceRenderer raytraceRenderer = RaytraceRenderer(camera);
 
-Renderer* currentRenderer = &modelRenderer;
+Renderer* currentRenderer = &raytraceRenderer;
 bool savingFrames = false;
 int frameCounter = 0;
 
@@ -49,49 +52,24 @@ float theta_step = glm::radians(5.0f);
 
 void handleEvent(SDL_Event event, DrawingWindow &window) {
 	if (event.type == SDL_KEYDOWN) {
-		if (event.key.keysym.sym == SDLK_LEFT) modelRenderer.cameraPosition.x -= cameraStepSize;
-		else if (event.key.keysym.sym == SDLK_RIGHT) modelRenderer.cameraPosition.x += cameraStepSize;
-		else if (event.key.keysym.sym == SDLK_UP) modelRenderer.cameraPosition.y += cameraStepSize;
-		else if (event.key.keysym.sym == SDLK_DOWN) modelRenderer.cameraPosition.y -= cameraStepSize;
-		else if (event.key.keysym.sym == SDLK_z) modelRenderer.cameraPosition.z -= cameraStepSize;
-        else if (event.key.keysym.sym == SDLK_x) modelRenderer.cameraPosition.z += cameraStepSize;
-        else if (event.key.keysym.sym == SDLK_j) modelRenderer.cameraOrientation = ModelRenderer::rotY( theta_step) * modelRenderer.cameraOrientation;  // pan left
-        else if (event.key.keysym.sym == SDLK_l) modelRenderer.cameraOrientation = ModelRenderer::rotY(-theta_step) * modelRenderer.cameraOrientation;  // pan right
-        else if (event.key.keysym.sym == SDLK_i) modelRenderer.cameraOrientation = ModelRenderer::rotX( theta_step) * modelRenderer.cameraOrientation;  // tilt up
-        else if (event.key.keysym.sym == SDLK_k) modelRenderer.cameraOrientation = ModelRenderer::rotX(-theta_step) * modelRenderer.cameraOrientation;  // tilt down
-        else if (event.key.keysym.sym == SDLK_w) {
-            glm::mat3 R = ModelRenderer::rotX(theta_step);
-            modelRenderer.cameraPosition    = R * modelRenderer.cameraPosition;
-//            modelRenderer.cameraOrientation = R * modelRenderer.cameraOrientation;
-//            modelRenderer.cameraOrientation *= R;
-            modelRenderer.cameraOrientation = ModelRenderer::lookAt(glm::vec3(0, 0, 0), modelRenderer.cameraPosition);
-        }
-        else if (event.key.keysym.sym == SDLK_a) {
-            glm::mat3 R = ModelRenderer::rotY(theta_step);
-            modelRenderer.cameraPosition    = R * modelRenderer.cameraPosition;
-//            modelRenderer.cameraOrientation = R * modelRenderer.cameraOrientation;
-//            modelRenderer.cameraOrientation *= R;
-            modelRenderer.cameraOrientation = ModelRenderer::lookAt(glm::vec3(0, 0, 0), modelRenderer.cameraPosition);
-        }
-        else if (event.key.keysym.sym == SDLK_s) {
-            glm::mat3 R = ModelRenderer::rotX(-theta_step);
-            modelRenderer.cameraPosition    = R * modelRenderer.cameraPosition;
-//            modelRenderer.cameraOrientation = R * modelRenderer.cameraOrientation;
-//            modelRenderer.cameraOrientation *= R;
-            modelRenderer.cameraOrientation = ModelRenderer::lookAt(glm::vec3(0, 0, 0), modelRenderer.cameraPosition);
-        }
-        else if (event.key.keysym.sym == SDLK_d) {
-            glm::mat3 R = ModelRenderer::rotY(-theta_step);
-            modelRenderer.cameraPosition    = R * modelRenderer.cameraPosition;
-//            modelRenderer.cameraOrientation = R * modelRenderer.cameraOrientation;
-//            modelRenderer.cameraOrientation *= R;
-            modelRenderer.cameraOrientation = ModelRenderer::lookAt(glm::vec3(0, 0, 0), modelRenderer.cameraPosition);
-        }
-        else if (event.key.keysym.sym == SDLK_q) {
-            modelRenderer.cameraPosition = glm::vec3(0, 0, 3.5);
-            modelRenderer.cameraOrientation = glm::mat3(1.0f);
-            modelRenderer.spinning = !modelRenderer.spinning;
-        }
+        if (event.key.keysym.sym == SDLK_LEFT) camera.translate(glm::vec3(-cameraStepSize, 0, 0));
+        else if (event.key.keysym.sym == SDLK_RIGHT) camera.translate(glm::vec3(cameraStepSize, 0, 0));
+        else if (event.key.keysym.sym == SDLK_UP) camera.translate(glm::vec3(0, cameraStepSize, 0));
+        else if (event.key.keysym.sym == SDLK_DOWN) camera.translate(glm::vec3(0, -cameraStepSize, 0));
+        else if (event.key.keysym.sym == SDLK_z) camera.translate(glm::vec3(0, 0, -cameraStepSize));
+        else if (event.key.keysym.sym == SDLK_x) camera.translate(glm::vec3(0, 0, cameraStepSize));
+        // Pan
+        else if (event.key.keysym.sym == SDLK_j) camera.pan(theta_step);
+        else if (event.key.keysym.sym == SDLK_l) camera.pan(-theta_step);
+        // Tilt
+        else if (event.key.keysym.sym == SDLK_i) camera.tilt(-theta_step);
+        else if (event.key.keysym.sym == SDLK_k) camera.tilt(theta_step);
+        // Orbit
+        else if (event.key.keysym.sym == SDLK_d) camera.orbitY(theta_step);
+        else if (event.key.keysym.sym == SDLK_a) camera.orbitY(-theta_step);
+        else if (event.key.keysym.sym == SDLK_w) camera.orbitUp(theta_step);
+        else if (event.key.keysym.sym == SDLK_s) camera.orbitUp(-theta_step);
+        else if (event.key.keysym.sym == SDLK_q) camera.reset();
 		else if (event.key.keysym.sym == SDLK_u) {
             CanvasPoint v1((rand() % WIDTH), (rand() % HEIGHT));
             CanvasPoint v2((rand() % WIDTH), (rand() % HEIGHT));
