@@ -7,8 +7,11 @@
 #include "Globals.h"
 #include <CanvasPoint.h>
 #include <Colour.h>
+#include <cstdint>
 #include <vector>
 #include "RayTriangleIntersection.h"
+
+constexpr double PI = 3.14159265;
 
 // Gets information about the closest intersection when firing a ray
 RayTriangleIntersection getClosestIntersection(glm::vec3 cameraPosition, glm::vec3 rayDirection,
@@ -35,6 +38,13 @@ RayTriangleIntersection getClosestIntersection(glm::vec3 cameraPosition, glm::ve
     }
 
     return closestIntersection;
+}
+
+float RaytraceRenderer::lightLevel(const glm::vec3 &point) {
+    glm::vec3 toLight = lightPos - point; 
+    float radius = glm::length(toLight);
+
+    return (lightStrength / (4 * PI * (radius * radius)));
 }
 
 /// Check if the point is in shadow 
@@ -82,15 +92,25 @@ void RaytraceRenderer::draw(DrawingWindow &window) {
                 -1
             );
             if (intersection.distanceFromCamera < renderDistance){
-                float shadowStrength = 1 / lightStrength;
-                Colour c = intersection.intersectedTriangle.colour;
+                float shadowStrength = 1 / std::max(1.0f, lightStrength);
+                float level = lightLevel(intersection.intersectionPoint);
 
-                if (inShadow(intersection.intersectionPoint, intersection.intersectedTriangle, intersection.triangleIndex)) {
-                    c = Colour(c.red * shadowStrength, 
-                               c.green * shadowStrength, 
-                               c.blue * shadowStrength);
-                }
-                uint32_t colour = (255 << 24) + (c.red << 16) + (c.green << 8) + c.blue;
+                Colour c = intersection.intersectedTriangle.colour;
+                c.red *= level;
+                c.green *= level;
+                c.blue *= level;
+
+//                if (inShadow(intersection.intersectionPoint, intersection.intersectedTriangle, intersection.triangleIndex)) {
+//                    c = Colour(c.red * shadowStrength, 
+//                               c.green * shadowStrength, 
+//                               c.blue * shadowStrength);
+//                }
+
+                uint32_t r = (uint32_t)std::min(255.0f, std::max(0.0f, (float)c.red));
+                uint32_t g = (uint32_t)std::min(255.0f, std::max(0.0f, (float)c.green));
+                uint32_t b = (uint32_t)std::min(255.0f, std::max(0.0f, (float)c.blue));
+
+                uint32_t colour = (255 << 24) + (r << 16) + (g << 8) + b;
 
                 window.setPixelColour(x, y, colour);
             }

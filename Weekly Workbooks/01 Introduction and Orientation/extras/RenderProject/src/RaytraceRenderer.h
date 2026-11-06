@@ -19,13 +19,13 @@ class RaytraceRenderer: public Renderer {
     private:
         Camera &camera;
         float renderDistance = FLT_MAX;
-        glm::vec3 lightPos = glm::vec3(0, 0.66, 0);
-        float lightStrength = 4;
+        glm::vec3 lightPos = glm::vec3(0, 0.5, 0);
+        float lightStrength = 9;
 
         glm::vec3 lastPos;
         glm::mat3 lastOri;
         bool hasRendered = false;
 
+        float lightLevel(const glm::vec3 &point);
         bool inShadow(const glm::vec3 &point, const ModelTriangle &tri, int triIndex);
-        glm::vec3 pixelToRayDir(const Camera &camera, int x, int y);
 };
