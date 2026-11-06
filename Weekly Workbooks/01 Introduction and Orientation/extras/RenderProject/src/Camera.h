@@ -26,4 +26,7 @@ public:
     void orbitUp(float theta);
     void reset();
     void update();
+
+    CanvasPoint projectVertexOntoCanvasPoint(glm::vec3 vertexPosition);
+    glm::vec3 pixelToRayDir(int x, int y);
 };

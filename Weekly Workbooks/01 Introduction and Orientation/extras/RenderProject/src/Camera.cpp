@@ -21,9 +21,9 @@ glm::mat3 Camera::rotX(float t) {
 
 /// Rotate around the Y axis
 glm::mat3 Camera::rotY(float t) {
-    return glm::mat3(std::cos(t), 0, -std::sin(t),
+    return glm::mat3(std::cos(t), 0, std::sin(t),
                      0, 1, 0,
-                     std::sin(t), 0, std::cos(t));
+                     -std::sin(t), 0, std::cos(t));
 }
 
 /// Move the camera
@@ -68,4 +68,24 @@ void Camera::update() {
     }
 }
 
+CanvasPoint Camera::projectVertexOntoCanvasPoint(glm::vec3 vertexPosition) {
+    glm::vec3 rel = glm::inverse(orientation) * (vertexPosition - position);
+    float depth = -rel.z;
+    if (depth <= 0.1) depth = 0.1;
 
+    float u = planeScale * focalLength * (rel.x / depth) + (float(WIDTH) / 2);
+    float v = -planeScale * focalLength * (rel.y / depth) + (float(HEIGHT) / 2);
+
+    CanvasPoint point(u, v);
+    point.depth = 1 / depth;
+
+    return point;
+}
+
+/// Sends ray through a certain pixel
+glm::vec3 Camera::pixelToRayDir(int x, int y) {
+    glm::vec3 d((x - float(WIDTH) / 2) / (planeScale * focalLength),
+               -(y - float(HEIGHT) / 2) / (planeScale * focalLength),
+                -1.0f);
+    return glm::normalize(orientation * d);
+}

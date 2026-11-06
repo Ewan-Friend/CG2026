@@ -5,22 +5,24 @@
 #include "BlueNoiseRenderer.h"
 #include "ColourSpectrumRenderer.h"
 #include "RasterisedRenderer.h"
+#include "WireframeRenderer.h"
 #include "ModelRenderer.h"
 #include "RaytraceRenderer.h"
 #include "Camera.h"
 #include "glm/detail/func_trigonometric.hpp"
 #include "glm/detail/type_vec.hpp"
 #include <SDL_keycode.h>
-#include <fstream>
-#include <iostream>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 // Define globals for WIDTH and HEIGHT of the window (can be accessed from any renderer)
+// Stable: WIDTH = 320, HEIGHT = 240
 extern const int WIDTH = 320;
 extern const int HEIGHT = 240;
-extern const std::string WORKBOOK = "../../../";
+
+// Define global object and materials files 
+extern const std::string COR_OBJECT = "./cornell-box.obj";
+extern const std::string COR_MATERIAL = "./cornell-box.mtl";
 
 DrawingWindow window = DrawingWindow(WIDTH, HEIGHT);
 Camera camera;
@@ -31,6 +33,7 @@ ColourSpectrumRenderer colourSpectrum = ColourSpectrumRenderer();
 RasterisedRenderer rasterisedRenderer = RasterisedRenderer();
 ModelRenderer modelRenderer = ModelRenderer(camera);
 RaytraceRenderer raytraceRenderer = RaytraceRenderer(camera);
+WireframeRenderer wireframeRenderer = WireframeRenderer(camera);
 
 Renderer* currentRenderer = &raytraceRenderer;
 bool savingFrames = false;
@@ -44,10 +47,7 @@ glm::mat3 cameraOrientation;
 glm::vec3 lightPosition(0.0, 0.8, 0.0);
 
 // Camera controls 
-float cameraStepSize = 0.5;
-
-
-
+float cameraStepSize = 0.25;
 float theta_step = glm::radians(5.0f);
 
 void handleEvent(SDL_Event event, DrawingWindow &window) {
@@ -65,8 +65,8 @@ void handleEvent(SDL_Event event, DrawingWindow &window) {
         else if (event.key.keysym.sym == SDLK_i) camera.tilt(-theta_step);
         else if (event.key.keysym.sym == SDLK_k) camera.tilt(theta_step);
         // Orbit
-        else if (event.key.keysym.sym == SDLK_d) camera.orbitY(theta_step);
-        else if (event.key.keysym.sym == SDLK_a) camera.orbitY(-theta_step);
+        else if (event.key.keysym.sym == SDLK_d) camera.orbitY(-theta_step);
+        else if (event.key.keysym.sym == SDLK_a) camera.orbitY(theta_step);
         else if (event.key.keysym.sym == SDLK_w) camera.orbitUp(theta_step);
         else if (event.key.keysym.sym == SDLK_s) camera.orbitUp(-theta_step);
         else if (event.key.keysym.sym == SDLK_q) camera.reset();
@@ -86,6 +86,9 @@ void handleEvent(SDL_Event event, DrawingWindow &window) {
         } 
 		else if (event.key.keysym.sym == SDLK_TAB) savingFrames = !savingFrames;
 		else if (event.key.keysym.sym == SDLK_RETURN) window.toggleFullscreen();
+        else if (event.key.keysym.sym == SDLK_1) currentRenderer = &raytraceRenderer;
+        else if (event.key.keysym.sym == SDLK_2) currentRenderer = &modelRenderer;
+        else if (event.key.keysym.sym == SDLK_3) currentRenderer = &wireframeRenderer;
 	}
 }
 

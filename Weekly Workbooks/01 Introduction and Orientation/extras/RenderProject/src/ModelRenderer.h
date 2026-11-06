@@ -3,8 +3,6 @@
 #include "Camera.h"
 #include "DrawingWindow.h"
 #include "Renderer.h"
-#include "glm/detail/type_mat.hpp"
-#include "glm/detail/type_vec.hpp"
 
 class ModelRenderer: public Renderer {
     public:
