@@ -10,6 +10,8 @@
 #include <cstdint>
 #include <vector>
 #include "RayTriangleIntersection.h"
+#include "glm/detail/func_geometric.hpp"
+#include "glm/detail/type_vec.hpp"
 
 constexpr double PI = 3.14159265;
 
@@ -44,7 +46,7 @@ float RaytraceRenderer::lightLevel(const glm::vec3 &point) {
     glm::vec3 toLight = lightPos - point; 
     float radius = glm::length(toLight);
 
-    return (lightStrength / (4 * PI * (radius * radius)));
+    return (lightStrength * 2 / (7 * PI * (radius * radius)));
 }
 
 /// Check if the point is in shadow 
@@ -56,9 +58,7 @@ bool RaytraceRenderer::inShadow(const glm::vec3 &point, const ModelTriangle &tri
     glm::vec3 lightDirection = glm::normalize(toLight);
 
     // See if triangle face is "facing" the light
-    glm::vec3 e0 = tri.vertices[1] - tri.vertices[0];
-    glm::vec3 e1 = tri.vertices[2] - tri.vertices[0];
-    glm::vec3 normal = glm::normalize(glm::cross(e0, e1));
+    glm::vec3 normal = tri.normal; 
     bool lightSide  = glm::dot(normal, lightPos - point) > 0;
     bool viewerSide = glm::dot(normal, camera.position - point) > 0;
     if (lightSide != viewerSide) return true;
@@ -72,6 +72,22 @@ bool RaytraceRenderer::inShadow(const glm::vec3 &point, const ModelTriangle &tri
     return NearestCover.distanceFromCamera < distanceFromLight - offsetDistance;
 };
 
+float RaytraceRenderer::angleOfIncidence(const glm::vec3 &point, glm::vec3 normal) {
+    glm::vec3 toLight = lightPos - point; 
+    glm::vec3 lightDirection = glm::normalize(toLight);
+
+    return glm::dot(normal, lightDirection);
+}
+
+float RaytraceRenderer::specularLight(glm::vec3 &point, glm::vec3 normal, int N, glm::vec3 view) {
+    glm::vec3 toLight = lightPos - point; 
+    glm::vec3 lightDirection = glm::normalize(toLight);
+
+    glm::vec3 reflection = lightDirection - 2.0f * normal * (glm::dot(lightDirection, normal));
+
+    float specular = glm::dot(reflection, view);
+    return std::pow(specular, N);
+}
 
 void RaytraceRenderer::draw(DrawingWindow &window) {
     // camera.update();
@@ -82,6 +98,7 @@ void RaytraceRenderer::draw(DrawingWindow &window) {
         triangles = parseObj(COR_OBJECT, pallete);
         loaded = true;
     }
+
     for (int x = 0; x < WIDTH; x++){
         for (int y = 0; y < HEIGHT; y++){
             glm::vec3 direction = camera.pixelToRayDir(x, y);
@@ -92,19 +109,24 @@ void RaytraceRenderer::draw(DrawingWindow &window) {
                 -1
             );
             if (intersection.distanceFromCamera < renderDistance){
-                float shadowStrength = 1 / std::max(1.0f, lightStrength);
-                float level = lightLevel(intersection.intersectionPoint);
+                glm::vec3 point = intersection.intersectionPoint;
+                ModelTriangle tri = intersection.intersectedTriangle;
+                int triIndex = intersection.triangleIndex;
+//                float shadowStrength = 1 / std::max(1.0f, lightStrength);
+//                float shadowStrength = 0.4;
+//                float level = lightLevel(point);
+                float incidence = angleOfIncidence(point, tri.normal);
+                float direct = inShadow(point, tri, triIndex) ? 0.0f : lightLevel(point);
+                float diffuse = incidence * direct;
 
-                Colour c = intersection.intersectedTriangle.colour;
-                c.red *= level;
-                c.green *= level;
-                c.blue *= level;
+                glm::vec3 view = glm::normalize(camera.position - point);
+                float pureSpecular = specularLight(point, tri.normal, specularExponent, view);
+                float specular = direct * pureSpecular;
 
-//                if (inShadow(intersection.intersectionPoint, intersection.intersectedTriangle, intersection.triangleIndex)) {
-//                    c = Colour(c.red * shadowStrength, 
-//                               c.green * shadowStrength, 
-//                               c.blue * shadowStrength);
-//                }
+                Colour c = tri.colour;
+                c.red = c.red * diffuse + 255.0f * specular;
+                c.green = c.green * diffuse + 255.0f * specular;
+                c.blue = c.blue * diffuse + 255.0f * specular;
 
                 uint32_t r = (uint32_t)std::min(255.0f, std::max(0.0f, (float)c.red));
                 uint32_t g = (uint32_t)std::min(255.0f, std::max(0.0f, (float)c.green));

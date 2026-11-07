@@ -19,8 +19,9 @@ class RaytraceRenderer: public Renderer {
     private:
         Camera &camera;
         float renderDistance = FLT_MAX;
-        glm::vec3 lightPos = glm::vec3(0, 0.5, 0);
-        float lightStrength = 9;
+        glm::vec3 lightPos = glm::vec3(0, 0.4, 1);
+        float lightStrength = 20;
+        int specularExponent = 256;
 
         glm::vec3 lastPos;
         glm::mat3 lastOri;
@@ -28,4 +29,6 @@ class RaytraceRenderer: public Renderer {
 
         float lightLevel(const glm::vec3 &point);
         bool inShadow(const glm::vec3 &point, const ModelTriangle &tri, int triIndex);
+        float angleOfIncidence(const glm::vec3 &point, glm::vec3 normal);
+        float specularLight(glm::vec3 &point, glm::vec3 normal, int N, glm::vec3 view);
 };

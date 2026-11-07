@@ -42,7 +42,18 @@ std::vector<ModelTriangle> parseObj(const std::string &filename, std::unordered_
             int ai = std::stoi(a.substr(0, a.find("/"))) - 1;
             int bi = std::stoi(b.substr(0, b.find("/"))) - 1;
             int ci = std::stoi(c.substr(0, c.find("/"))) - 1;
-            ModelTriangle tri(vertices[ai], vertices[bi], vertices[ci], colour);
+
+            glm::vec3 va = vertices[ai];
+            glm::vec3 vb = vertices[bi];
+            glm::vec3 vc = vertices[ci];
+
+            glm::vec3 e0 = vb - va;
+            glm::vec3 e1 = vc - va;
+            glm::vec3 normal = glm::normalize(glm::cross(e0, e1));
+
+            ModelTriangle tri(va, vb, vc, colour);
+            tri.normal = normal;
+
             triangles.push_back(tri);
         }
     }
