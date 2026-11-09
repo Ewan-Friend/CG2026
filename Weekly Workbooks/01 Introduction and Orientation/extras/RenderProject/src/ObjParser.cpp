@@ -2,19 +2,23 @@
 #include "ObjParser.h"
 #include "Colour.h"
 #include "ModelTriangle.h"
+#include "glm/detail/func_geometric.hpp"
 #include "glm/detail/type_vec.hpp"
+#include <cstddef>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
-std::vector<ModelTriangle> parseObj(const std::string &filename, std::unordered_map<std::string, Colour> pallete){
+/// Parse object files into a set of trian
+std::vector<ModelTriangle> parseObj(const std::string &filename, const std::unordered_map<std::string, Colour> &pallete){
 
     std::vector<ModelTriangle> triangles;
     std::string line;
     std::vector<glm::vec3> vertices;
-    Colour colour;
+    Colour colour(255, 0, 0);
 
     std::ifstream ObjFile(filename);
 
@@ -47,9 +51,7 @@ std::vector<ModelTriangle> parseObj(const std::string &filename, std::unordered_
             glm::vec3 vb = vertices[bi];
             glm::vec3 vc = vertices[ci];
 
-            glm::vec3 e0 = vb - va;
-            glm::vec3 e1 = vc - va;
-            glm::vec3 normal = glm::normalize(glm::cross(e0, e1));
+            glm::vec3 normal = glm::normalize(glm::cross((vb - va), (vc - va)));
 
             ModelTriangle tri(va, vb, vc, colour);
             tri.normal = normal;
@@ -61,6 +63,7 @@ std::vector<ModelTriangle> parseObj(const std::string &filename, std::unordered_
     return triangles;
 }
 
+/// Parse material files into a pallete
 std::unordered_map<std::string, Colour> parseMat(const std::string &filename){
     std::unordered_map<std::string, Colour> pallete;
     std::string line, name;
@@ -88,3 +91,20 @@ std::unordered_map<std::string, Colour> parseMat(const std::string &filename){
     return pallete;
 }
 
+/// Return vertex normals for each triangle
+std::vector<std::array<glm::vec3, 3>> findVertexNormals(const std::vector<ModelTriangle> &triangles) {
+    std::vector<std::array<glm::vec3, 3>> result(triangles.size());
+
+    for (size_t i = 0; i < triangles.size(); i++){
+        for (size_t j = 0; j < 3; j++){
+            glm::vec3 sum(0.0f);
+            for (size_t i_ = 0; i_ < triangles.size(); i_++){
+                for (size_t j_ = 0; j_ < 3; j_++){
+                    if (triangles[i_].vertices[j_] == triangles[i].vertices[j]) sum += triangles[j].normal;
+                }
+            }
+            result[i][j] = glm::normalize(sum);
+        }
+    }
+    return result;
+}

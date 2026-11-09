@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <cfloat>
 #include <vector>
 #include <glm/glm.hpp>
@@ -15,13 +16,15 @@ class RaytraceRenderer: public Renderer {
         void draw(DrawingWindow &window) override;
 
         std::vector<ModelTriangle> triangles;
+        std::vector<std::array<glm::vec3, 3>> vertexNormals;
         bool loaded = false;
+        glm::vec3 lightPos = glm::vec3(0, 0.4, 1);
     private:
         Camera &camera;
         float renderDistance = FLT_MAX;
-        glm::vec3 lightPos = glm::vec3(0, 0.4, 1);
         float lightStrength = 20;
         int specularExponent = 256;
+        float minBrightnessThreshold = 0.2;
 
         glm::vec3 lastPos;
         glm::mat3 lastOri;

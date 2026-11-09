@@ -12,8 +12,9 @@ void WireframeRenderer::draw(DrawingWindow &window) {
     camera.update();
 
     if (!loaded){
-        auto pallete = parseMat(COR_MATERIAL);
-        triangles = parseObj(COR_OBJECT, pallete);
+//        auto pallete = parseMat(COR_MATERIAL);
+//        triangles = parseObj(COR_OBJECT, pallete);
+        triangles = parseObj(SPHERE_OBJECT);
         loaded = true;
     }
 

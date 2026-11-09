@@ -8,6 +8,7 @@
 #include <CanvasPoint.h>
 #include <Colour.h>
 #include <cstdint>
+#include <unordered_map>
 #include <vector>
 #include "RayTriangleIntersection.h"
 #include "glm/detail/func_geometric.hpp"
@@ -42,13 +43,6 @@ RayTriangleIntersection getClosestIntersection(glm::vec3 cameraPosition, glm::ve
     return closestIntersection;
 }
 
-float RaytraceRenderer::lightLevel(const glm::vec3 &point) {
-    glm::vec3 toLight = lightPos - point; 
-    float radius = glm::length(toLight);
-
-    return (lightStrength * 2 / (7 * PI * (radius * radius)));
-}
-
 /// Check if the point is in shadow 
 bool RaytraceRenderer::inShadow(const glm::vec3 &point, const ModelTriangle &tri, int triIndex) {
     float offsetDistance = 0.001f;
@@ -72,6 +66,7 @@ bool RaytraceRenderer::inShadow(const glm::vec3 &point, const ModelTriangle &tri
     return NearestCover.distanceFromCamera < distanceFromLight - offsetDistance;
 };
 
+/// Finds the angle of incidence between the normal of a face and the light
 float RaytraceRenderer::angleOfIncidence(const glm::vec3 &point, glm::vec3 normal) {
     glm::vec3 toLight = lightPos - point; 
     glm::vec3 lightDirection = glm::normalize(toLight);
@@ -79,6 +74,15 @@ float RaytraceRenderer::angleOfIncidence(const glm::vec3 &point, glm::vec3 norma
     return glm::dot(normal, lightDirection);
 }
 
+/// Returns the light level my measuring distance to from the light
+float RaytraceRenderer::lightLevel(const glm::vec3 &point) {
+    glm::vec3 toLight = lightPos - point; 
+    float radius = glm::length(toLight);
+
+    return (lightStrength * 2 / (7 * PI * (radius * radius)));
+}
+
+/// Calculate the reflection of the light source onto a surface
 float RaytraceRenderer::specularLight(glm::vec3 &point, glm::vec3 normal, int N, glm::vec3 view) {
     glm::vec3 toLight = lightPos - point; 
     glm::vec3 lightDirection = glm::normalize(toLight);
@@ -94,8 +98,10 @@ void RaytraceRenderer::draw(DrawingWindow &window) {
     window.clearPixels();
 
     if (!loaded){
-        auto pallete = parseMat(COR_MATERIAL);
-        triangles = parseObj(COR_OBJECT, pallete);
+//        std::unordered_map<std::string, Colour> pallete = parseMat(COR_MATERIAL);
+//        triangles = parseObj(COR_OBJECT, pallete);
+        triangles = parseObj(SPHERE_OBJECT);
+        vertexNormals = findVertexNormals(triangles);
         loaded = true;
     }
 
@@ -112,21 +118,22 @@ void RaytraceRenderer::draw(DrawingWindow &window) {
                 glm::vec3 point = intersection.intersectionPoint;
                 ModelTriangle tri = intersection.intersectedTriangle;
                 int triIndex = intersection.triangleIndex;
-//                float shadowStrength = 1 / std::max(1.0f, lightStrength);
-//                float shadowStrength = 0.4;
-//                float level = lightLevel(point);
+
+                // Diffuse lighting
                 float incidence = angleOfIncidence(point, tri.normal);
                 float direct = inShadow(point, tri, triIndex) ? 0.0f : lightLevel(point);
-                float diffuse = incidence * direct;
+                float brightness = std::max(minBrightnessThreshold, incidence * direct);
 
+                // Specular lighting (fancy reflections)
                 glm::vec3 view = glm::normalize(camera.position - point);
                 float pureSpecular = specularLight(point, tri.normal, specularExponent, view);
                 float specular = direct * pureSpecular;
 
+                // Apply the lighting
                 Colour c = tri.colour;
-                c.red = c.red * diffuse + 255.0f * specular;
-                c.green = c.green * diffuse + 255.0f * specular;
-                c.blue = c.blue * diffuse + 255.0f * specular;
+                c.red = c.red * brightness + 255.0f * specular;
+                c.green = c.green * brightness + 255.0f * specular;
+                c.blue = c.blue * brightness + 255.0f * specular;
 
                 uint32_t r = (uint32_t)std::min(255.0f, std::max(0.0f, (float)c.red));
                 uint32_t g = (uint32_t)std::min(255.0f, std::max(0.0f, (float)c.green));

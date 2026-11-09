@@ -1,4 +1,5 @@
 #include "Colour.h"
+#include "Globals.h"
 #include "RasterisedRenderer.h"
 #include "Renderer.h"
 #include "RedNoiseRenderer.h"
@@ -23,6 +24,7 @@ extern const int HEIGHT = 240;
 // Define global object and materials files 
 extern const std::string COR_OBJECT = "./cornell-box.obj";
 extern const std::string COR_MATERIAL = "./cornell-box.mtl";
+extern const std::string SPHERE_OBJECT = "./sphere.obj";
 
 DrawingWindow window = DrawingWindow(WIDTH, HEIGHT);
 Camera camera;
@@ -46,8 +48,9 @@ glm::vec3 cameraPosition(0.0, 0.0, 4.0);
 glm::mat3 cameraOrientation;
 glm::vec3 lightPosition(0.0, 0.8, 0.0);
 
-// Camera controls 
+// Control variables
 float cameraStepSize = 0.25;
+float lightStepSize = 0.1;
 float theta_step = glm::radians(5.0f);
 
 void handleEvent(SDL_Event event, DrawingWindow &window) {
@@ -70,6 +73,10 @@ void handleEvent(SDL_Event event, DrawingWindow &window) {
         else if (event.key.keysym.sym == SDLK_w) camera.orbitUp(theta_step);
         else if (event.key.keysym.sym == SDLK_s) camera.orbitUp(-theta_step);
         else if (event.key.keysym.sym == SDLK_q) camera.reset();
+        else if (event.key.keysym.sym == SDLK_b) raytraceRenderer.lightPos.x -= lightStepSize;
+        else if (event.key.keysym.sym == SDLK_n) raytraceRenderer.lightPos.x += lightStepSize;
+        else if (event.key.keysym.sym == SDLK_g) raytraceRenderer.lightPos.y -= lightStepSize;
+        else if (event.key.keysym.sym == SDLK_t) raytraceRenderer.lightPos.y += lightStepSize;
 		else if (event.key.keysym.sym == SDLK_u) {
             CanvasPoint v1((rand() % WIDTH), (rand() % HEIGHT));
             CanvasPoint v2((rand() % WIDTH), (rand() % HEIGHT));
