@@ -11,13 +11,13 @@ void ModelRenderer::draw(DrawingWindow &window) {
     RasterisedRenderer::clearDepth();
     camera.update();
 
-    if (!loaded){
-        auto pallete = parseMat(COR_MATERIAL);
-        triangles = parseObj(COR_OBJECT, pallete);
-        loaded = true;
-    }
+    //if (!loaded){
+        //auto pallete = parseMat(COR_MATERIAL);
+        //triangles = parseObj(COR_OBJECT, pallete);
+        //loaded = true;
+    //}
 
-    for (ModelTriangle &tri : triangles){
+    for (ModelTriangle &tri : SCENE_TRIANGLES){
         CanvasPoint v0, v1, v2;
         v0 = camera.projectVertexOntoCanvasPoint(tri.vertices[0]);
         v1 = camera.projectVertexOntoCanvasPoint(tri.vertices[1]);

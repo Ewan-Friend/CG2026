@@ -10,6 +10,7 @@
 #include "ModelRenderer.h"
 #include "RaytraceRenderer.h"
 #include "Camera.h"
+#include "ObjParser.h"
 #include "glm/detail/func_trigonometric.hpp"
 #include "glm/detail/type_vec.hpp"
 #include <SDL_keycode.h>
@@ -45,6 +46,22 @@ int frameCounter = 0;
 float cameraStepSize = 0.25;
 float lightStepSize = 0.1;
 float theta_step = glm::radians(5.0f);
+
+// TODO: DELETE MODEL CHANGER BEFORE SUBMISSION
+std::vector<ModelTriangle> SCENE_TRIANGLES;
+int SCENE_VERSION = 0;
+struct ModelEntry { std::string obj; std::string mtl; };
+std::vector<ModelEntry> MODELS = {
+    { COR_OBJECT,    COR_MATERIAL },
+    { SPHERE_OBJECT, "" },
+};
+int currentModel = 0;
+void loadScene(int index) {
+    const ModelEntry &m = MODELS[index];
+    if (m.mtl.empty()) SCENE_TRIANGLES = parseObj(m.obj);
+    else               SCENE_TRIANGLES = parseObj(m.obj, parseMat(m.mtl));
+    SCENE_VERSION++;
+}
 
 void handleEvent(SDL_Event event, DrawingWindow &window) {
 	if (event.type == SDL_KEYDOWN) {
@@ -89,6 +106,19 @@ void handleEvent(SDL_Event event, DrawingWindow &window) {
         else if (event.key.keysym.sym == SDLK_1) currentRenderer = &raytraceRenderer;
         else if (event.key.keysym.sym == SDLK_2) currentRenderer = &modelRenderer;
         else if (event.key.keysym.sym == SDLK_3) currentRenderer = &wireframeRenderer;
+        else if (event.key.keysym.sym == SDLK_4) raytraceRenderer.shading = 
+            (raytraceRenderer.shading != RaytraceRenderer::ShadingMethod::Gouraud) ? 
+                raytraceRenderer.shading = RaytraceRenderer::ShadingMethod::Gouraud : 
+                raytraceRenderer.shading = RaytraceRenderer::ShadingMethod::Flat; 
+        else if (event.key.keysym.sym == SDLK_5) raytraceRenderer.shading = 
+            (raytraceRenderer.shading != RaytraceRenderer::ShadingMethod::Phong) ? 
+                raytraceRenderer.shading = RaytraceRenderer::ShadingMethod::Phong : 
+                raytraceRenderer.shading = RaytraceRenderer::ShadingMethod::Flat; 
+        //TODO: DELETE MODEL CHANGER BEFORE SUBMISSION
+        else if (event.key.keysym.sym == SDLK_m) {
+            currentModel = (currentModel + 1) % MODELS.size();
+            loadScene(currentModel);
+        }
 	}
 }
 

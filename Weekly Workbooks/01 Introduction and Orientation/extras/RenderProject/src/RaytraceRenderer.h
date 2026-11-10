@@ -18,19 +18,16 @@ class RaytraceRenderer: public Renderer {
 
         std::vector<ModelTriangle> triangles;
         std::vector<std::array<glm::vec3, 3>> vertexNormals;
-        bool loaded = false;
+        // bool loaded = false;
         glm::vec3 lightPos = glm::vec3(0, 0.4, 1);
-        enum class ShadingMethod : int {
-            Flat = 0,
-            Gouraud = 1,
-            Phong = 2,
-        };
+        enum class ShadingMethod { Flat = 0, Gouraud = 1, Phong = 2 };
+        ShadingMethod shading = ShadingMethod::Flat;
     private:
         Camera &camera;
         float renderDistance = FLT_MAX;
-        float lightStrength = 20;
+        float lightStrength = 20.0f;
         int specularExponent = 256;
-        float minBrightnessThreshold = 0.2;
+        float minBrightnessThreshold = 0.2f;
 
         glm::vec3 lastPos;
         glm::mat3 lastOri;
@@ -39,7 +36,7 @@ class RaytraceRenderer: public Renderer {
         float lightLevel(const glm::vec3 &point);
         bool inShadow(const glm::vec3 &point, const glm::vec3 &normal, int triIndex);
         float angleOfIncidence(const glm::vec3 &point, glm::vec3 normal);
-        float specularLight(glm::vec3 &point, glm::vec3 normal, int N, glm::vec3 view);
+        float specularLight(const glm::vec3 &point, glm::vec3 normal, int N, glm::vec3 view);
         glm::vec3 calculatePointColour(
             const glm::vec3 &point, 
             const glm::vec3 &normal, 
@@ -56,4 +53,7 @@ class RaytraceRenderer: public Renderer {
             glm::vec3 hitPoint,
             std::array<glm::vec3, 3> vNormals
         );
+        
+        // TODO: DELETE BEFORE SUBMISSION
+        int seenVersion = -1;
 };

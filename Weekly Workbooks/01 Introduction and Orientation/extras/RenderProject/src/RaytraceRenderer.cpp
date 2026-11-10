@@ -50,7 +50,12 @@ bool RaytraceRenderer::inShadow(const glm::vec3 &point, const glm::vec3 &normal,
     float distanceFromLight = glm::length(toLight);
     glm::vec3 lightDirection = glm::normalize(toLight);
 
-    if (glm::dot(normal, lightDirection) <= 0.0f) return true;
+//    if (glm::dot(normal, lightDirection) <= 0.0f) return true;
+
+    // See if triangle face is "facing" the light
+    bool lightSide  = glm::dot(normal, lightPos - point) > 0;
+    bool viewerSide = glm::dot(normal, camera.position - point) > 0;
+    if (lightSide != viewerSide) return true;
 
     // See if there is a triangle in the way of the light
     RayTriangleIntersection NearestCover = getClosestIntersection(
@@ -79,7 +84,7 @@ float RaytraceRenderer::lightLevel(const glm::vec3 &point) {
 }
 
 /// Calculate the reflection of the light source onto a surface
-float RaytraceRenderer::specularLight(glm::vec3 &point, glm::vec3 normal, int N, glm::vec3 view) {
+float RaytraceRenderer::specularLight(const glm::vec3 &point, glm::vec3 normal, int N, glm::vec3 view) {
     glm::vec3 toLight = lightPos - point; 
     glm::vec3 lightDirection = glm::normalize(toLight);
 
@@ -123,7 +128,7 @@ glm::vec3 RaytraceRenderer::calculatePointColour(
 
     // Specular lighting (fancy reflections)
     glm::vec3 view = glm::normalize(camera.position - point);
-    float pureSpecular = specularLight(const_cast<glm::vec3&>(point), normal, specularExponent, view);
+    float pureSpecular = specularLight(point, normal, specularExponent, view);
     float specular = direct * pureSpecular;
 
 //    float specular = 0.0f;
@@ -185,24 +190,27 @@ glm::vec3 RaytraceRenderer::phongShading(
 void RaytraceRenderer::draw(DrawingWindow &window) {
     // camera.update();
     window.clearPixels();
-
-    if (!loaded){
+    if (seenVersion != SCENE_VERSION) {
+        triangles = SCENE_TRIANGLES;
+        vertexNormals = findVertexNormals(triangles);
+        seenVersion = SCENE_VERSION;
+    }
+    //if (!loaded){
 //        std::unordered_map<std::string, Colour> pallete = parseMat(COR_MATERIAL);
 //        triangles = parseObj(COR_OBJECT, pallete);
-        triangles = parseObj(SPHERE_OBJECT);
-        vertexNormals = findVertexNormals(triangles);
-        loaded = true;
-    }
+        //triangles = parseObj(SPHERE_OBJECT);
+        //vertexNormals = findVertexNormals(triangles);
+        //loaded = true;
+    //}
 
     #pragma omp parallel for schedule(dynamic, 4)
     for (int x = 0; x < WIDTH; x++){
         for (int y = 0; y < HEIGHT; y++){
             glm::vec3 direction = camera.pixelToRayDir(x, y); 
             RayTriangleIntersection intersection = getClosestIntersection( 
-                camera.position, direction, triangles, -1
+                camera.position, direction, SCENE_TRIANGLES, -1
             ); 
             if (intersection.distanceFromCamera < renderDistance){ 
-                ShadingMethod shading = ShadingMethod::Phong;
 
                 glm::vec3 point = intersection.intersectionPoint;
                 ModelTriangle tri = intersection.intersectedTriangle;

@@ -23,7 +23,7 @@ COMPILER_OPTIONS := -c -pipe -Wall -O2 -fopenmp -std=c++11 # If you have an olde
 DEBUG_OPTIONS := -ggdb -g3
 FUSSY_OPTIONS := -Werror -pedantic
 SANITIZER_OPTIONS := -O1 -fsanitize=undefined -fsanitize=address -fno-omit-frame-pointer
-SPEEDY_OPTIONS := -Ofast -funsafe-math-optimizations -march=native
+SPEEDY_OPTIONS := $(OMP) -Ofast -funsafe-math-optimizations -march=native
 # No linker options currently, but variable left in case we need to add anything
 LINKER_OPTIONS := -fopenmp
 
@@ -37,6 +37,8 @@ SDL_COMPILER_FLAGS := $(shell sdl2-config --cflags)
 # Linker flags should look something like: -L/usr/local/lib -lSDL2
 SDL_LINKER_FLAGS := $(shell sdl2-config --libs)
 
+# [[[[[[[[ CUSTOM ]]]]]]]]
+OMP := $(shell echo 'int main(){}' | clang++ -fopenmp -x c++ - -o /dev/null 2>/dev/null && echo -fopenmp)
 
 default: debug
 
@@ -54,7 +56,7 @@ diagnostic: $(SDW_OBJECT_FILES) $(OWN_OBJECT_FILES)
 	./$(EXECUTABLE)
 
 # Rule to build for high performance executable (for manually testing interaction)
-speedy: $(SDW_OBJECT_FILES) $(OWN_OBJECT_FILES)
+speedy: $(if $(OMP),,deps) $(SDW_OBJECT_FILES) $(OWN_OBJECT_FILES)
 	$(COMPILER) $(COMPILER_OPTIONS) $(SPEEDY_OPTIONS) -o $(MAIN_OBJECT_FILE) $(MAIN_SOURCE_FILE) $(SDL_COMPILER_FLAGS) $(SDW_COMPILER_FLAGS) $(GLM_COMPILER_FLAGS)
 	$(COMPILER) $(LINKER_OPTIONS) $(SPEEDY_OPTIONS) -o $(EXECUTABLE) $(MAIN_OBJECT_FILE) $(SDW_OBJECT_FILES) $(OWN_OBJECT_FILES) $(SDL_LINKER_FLAGS)
 	./$(EXECUTABLE)
@@ -80,3 +82,10 @@ $(BUILD_DIR)SDW/%.o: $(SDW_DIR)%.cpp
 # Files to remove during clean
 clean:
 	rm -r $(BUILD_DIR)*
+
+# [[[[[[[[ CUSTOM ]]]]]]]]
+.PHONY: deps
+deps:
+	@if command -v pacman >/dev/null 2>&1; then sudo pacman -S --needed --noconfirm openmp sdl2 clang; \
+	elif command -v apt >/dev/null 2>&1; then sudo apt install -y libomp-dev libsdl2-dev clang; \
+	else echo "Unknown package manager: install libomp and SDL2 manually"; fielse echo "Unknown package manager: install libomp and SDL2 manually"; fi
