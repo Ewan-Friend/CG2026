@@ -93,14 +93,26 @@ float RaytraceRenderer::specularLight(glm::vec3 &point, glm::vec3 normal, int N,
     return std::pow(specular, N);
 }
 
+glm::vec2 getBarycentricWeight(const RayTriangleIntersection &tri){
+    const ModelTriangle &t = tri.intersectedTriangle;
+    glm::vec3 e1 = t.vertices[1] - t.vertices[0];
+    glm::vec3 e2 = t.vertices[2] - t.vertices[0];
+
+    // d = u·e0 + v·e1, we need to find u and v !!!
+    glm::vec3 distance = tri.intersectionPoint - t.vertices[0];
+
+    glm::vec3 normal = glm::cross(e1, e2);
+    float normalLengthSquared = glm::dot(normal, normal);
+}
+
 void RaytraceRenderer::draw(DrawingWindow &window) {
     // camera.update();
     window.clearPixels();
 
     if (!loaded){
-//        std::unordered_map<std::string, Colour> pallete = parseMat(COR_MATERIAL);
-//        triangles = parseObj(COR_OBJECT, pallete);
-        triangles = parseObj(SPHERE_OBJECT);
+        std::unordered_map<std::string, Colour> pallete = parseMat(COR_MATERIAL);
+        triangles = parseObj(COR_OBJECT, pallete);
+//        triangles = parseObj(SPHERE_OBJECT);
         vertexNormals = findVertexNormals(triangles);
         loaded = true;
     }
@@ -118,6 +130,7 @@ void RaytraceRenderer::draw(DrawingWindow &window) {
                 glm::vec3 point = intersection.intersectionPoint;
                 ModelTriangle tri = intersection.intersectedTriangle;
                 int triIndex = intersection.triangleIndex;
+
 
                 // Diffuse lighting
                 float incidence = angleOfIncidence(point, tri.normal);

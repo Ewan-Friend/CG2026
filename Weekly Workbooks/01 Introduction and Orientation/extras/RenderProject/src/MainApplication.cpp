@@ -41,13 +41,6 @@ Renderer* currentRenderer = &raytraceRenderer;
 bool savingFrames = false;
 int frameCounter = 0;
 
-// Core 3D rendering data structures (for when we eventually get around to working in 3D ;o)
-std::vector<ModelTriangle> triangles;
-std::vector<Colour> palette;
-glm::vec3 cameraPosition(0.0, 0.0, 4.0);
-glm::mat3 cameraOrientation;
-glm::vec3 lightPosition(0.0, 0.8, 0.0);
-
 // Control variables
 float cameraStepSize = 0.25;
 float lightStepSize = 0.1;
