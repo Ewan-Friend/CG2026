@@ -19,13 +19,13 @@ SDW_OBJECT_FILES := $(patsubst $(SDW_DIR)%.cpp, $(BUILD_DIR)SDW/%.o, $(SDW_SOURC
 
 # Build options
 COMPILER := clang++
-COMPILER_OPTIONS := -c -pipe -Wall -O2 -std=c++11 # If you have an older compiler, you might have to use -std=c++0x
+COMPILER_OPTIONS := -c -pipe -Wall -O2 -fopenmp -std=c++11 # If you have an older compiler, you might have to use -std=c++0x
 DEBUG_OPTIONS := -ggdb -g3
 FUSSY_OPTIONS := -Werror -pedantic
 SANITIZER_OPTIONS := -O1 -fsanitize=undefined -fsanitize=address -fno-omit-frame-pointer
 SPEEDY_OPTIONS := -Ofast -funsafe-math-optimizations -march=native
 # No linker options currently, but variable left in case we need to add anything
-LINKER_OPTIONS :=
+LINKER_OPTIONS := -fopenmp
 
 # Compiler and linker flags
 SDW_COMPILER_FLAGS := -I$(SDW_DIR)

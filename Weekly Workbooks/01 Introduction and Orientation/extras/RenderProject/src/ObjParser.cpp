@@ -100,7 +100,8 @@ std::vector<std::array<glm::vec3, 3>> findVertexNormals(const std::vector<ModelT
             glm::vec3 sum(0.0f);
             for (size_t i_ = 0; i_ < triangles.size(); i_++){
                 for (size_t j_ = 0; j_ < 3; j_++){
-                    if (triangles[i_].vertices[j_] == triangles[i].vertices[j]) sum += triangles[j].normal;
+                    float errorDistance = glm::distance(triangles[i_].vertices[j_], triangles[i].vertices[j]);
+                    if (errorDistance < 0.001f) sum += triangles[i_].normal;
                 }
             }
             result[i][j] = glm::normalize(sum);

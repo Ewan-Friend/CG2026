@@ -108,6 +108,7 @@ glm::vec3 convertToBarycentricCoordinates(glm::vec3 v0, glm::vec3 v1, glm::vec3 
     return glm::vec3(u,v,w);
 }
 
+/// Calculates the brightness of a single point
 glm::vec3 RaytraceRenderer::calculatePointColour(
     const glm::vec3 &point, 
     const glm::vec3 &normal, 
@@ -115,17 +116,17 @@ glm::vec3 RaytraceRenderer::calculatePointColour(
     int triIndex) 
 {
     // Diffuse lighting (now uses the passed-in vertex normal)
-//    float incidence = angleOfIncidence(point, normal);
+    float incidence = angleOfIncidence(point, normal);
     float direct = inShadow(point, normal, triIndex) ? 0.0f : lightLevel(point);
-    float incidence = 1.0f;
+//    float incidence = 1.0f;
     float brightness = std::max(minBrightnessThreshold, incidence * direct);
 
     // Specular lighting (fancy reflections)
-//    glm::vec3 view = glm::normalize(camera.position - point);
-//    float pureSpecular = specularLight(const_cast<glm::vec3&>(point), normal, specularExponent, view);
-//    float specular = direct * pureSpecular;
+    glm::vec3 view = glm::normalize(camera.position - point);
+    float pureSpecular = specularLight(const_cast<glm::vec3&>(point), normal, specularExponent, view);
+    float specular = direct * pureSpecular;
 
-    float specular = 0.0f;
+//    float specular = 0.0f;
     // Apply the lighting
     Colour c = tri.colour;
     c.red = c.red * brightness + 255.0f * specular;
@@ -135,6 +136,7 @@ glm::vec3 RaytraceRenderer::calculatePointColour(
     return glm::vec3(float(c.red), float(c.green), float(c.blue));
 }
 
+/// Applies Gouraud Shading to interpolate brighness from vertex normals
 glm::vec3 RaytraceRenderer::gouraudShading(
     RayTriangleIntersection intersection, 
     glm::vec3 hitPoint,
@@ -161,19 +163,38 @@ glm::vec3 RaytraceRenderer::gouraudShading(
     return w * c0 + u * c1 + v * c2;
 }
 
+glm::vec3 RaytraceRenderer::phongShading(
+    RayTriangleIntersection intersection, 
+    glm::vec3 hitPoint,
+    std::array<glm::vec3, 3> vNormals)
+{   
+    ModelTriangle tri = intersection.intersectedTriangle;
+    glm::vec3 barycentricWeights = convertToBarycentricCoordinates(
+        tri.vertices[0], tri.vertices[1], tri.vertices[2], hitPoint
+    );
+    float u = barycentricWeights.x;
+    float v = barycentricWeights.y;
+    float w = barycentricWeights.z;
+
+    return glm::normalize(
+        w * vNormals[0] + u * vNormals[1] + v * vNormals[2]
+    );
+}
+
 
 void RaytraceRenderer::draw(DrawingWindow &window) {
     // camera.update();
     window.clearPixels();
 
     if (!loaded){
-        //std::unordered_map<std::string, Colour> pallete = parseMat(COR_MATERIAL);
-        //triangles = parseObj(COR_OBJECT, pallete);
+//        std::unordered_map<std::string, Colour> pallete = parseMat(COR_MATERIAL);
+//        triangles = parseObj(COR_OBJECT, pallete);
         triangles = parseObj(SPHERE_OBJECT);
         vertexNormals = findVertexNormals(triangles);
         loaded = true;
     }
 
+    #pragma omp parallel for schedule(dynamic, 4)
     for (int x = 0; x < WIDTH; x++){
         for (int y = 0; y < HEIGHT; y++){
             glm::vec3 direction = camera.pixelToRayDir(x, y); 
@@ -181,15 +202,28 @@ void RaytraceRenderer::draw(DrawingWindow &window) {
                 camera.position, direction, triangles, -1
             ); 
             if (intersection.distanceFromCamera < renderDistance){ 
+                ShadingMethod shading = ShadingMethod::Phong;
+
                 glm::vec3 point = intersection.intersectionPoint;
                 ModelTriangle tri = intersection.intersectedTriangle;
                 int triIndex = intersection.triangleIndex;
-                glm::vec3 normal = tri.normal;
 
+                glm::vec3 normal, c;
                 std::array<glm::vec3, 3> vNormals = vertexNormals[intersection.triangleIndex];
-
-//                glm::vec3 c = calculatePointColour(point, normal, tri, triIndex);
-                glm::vec3 c = gouraudShading(intersection, intersection.intersectionPoint, vNormals);
+                switch(shading) {
+                    case ShadingMethod::Flat:
+                        normal = tri.normal;
+                        c = calculatePointColour(point, normal, tri, triIndex);
+                        break;
+                    case ShadingMethod::Gouraud:
+                        normal = tri.normal;
+                        c = gouraudShading(intersection, point, vNormals);
+                        break;
+                    case ShadingMethod::Phong:
+                        normal = phongShading(intersection, point, vNormals);
+                        c = calculatePointColour(point, normal, tri, triIndex);
+                        break;
+                }
                 uint32_t r = (uint32_t)std::min(255.0f, std::max(0.0f, c.r));
                 uint32_t g = (uint32_t)std::min(255.0f, std::max(0.0f, c.g));
                 uint32_t b = (uint32_t)std::min(255.0f, std::max(0.0f, c.b));

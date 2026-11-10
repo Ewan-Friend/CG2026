@@ -20,6 +20,11 @@ class RaytraceRenderer: public Renderer {
         std::vector<std::array<glm::vec3, 3>> vertexNormals;
         bool loaded = false;
         glm::vec3 lightPos = glm::vec3(0, 0.4, 1);
+        enum class ShadingMethod : int {
+            Flat = 0,
+            Gouraud = 1,
+            Phong = 2,
+        };
     private:
         Camera &camera;
         float renderDistance = FLT_MAX;
@@ -42,6 +47,11 @@ class RaytraceRenderer: public Renderer {
             int triIndex
         ); 
         glm::vec3 gouraudShading(
+            RayTriangleIntersection intersection, 
+            glm::vec3 hitPoint,
+            std::array<glm::vec3, 3> vNormals
+        );
+        glm::vec3 phongShading(
             RayTriangleIntersection intersection, 
             glm::vec3 hitPoint,
             std::array<glm::vec3, 3> vNormals
