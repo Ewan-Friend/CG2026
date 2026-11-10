@@ -14,6 +14,10 @@
 cmake_minimum_required(VERSION 3.12)
 project(RenderProject)
 
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Debug)
+endif()
+
 set(CMAKE_CXX_STANDARD 11)
 
 # Note, we do this for glm because it's a header-only library and because we shipped it with the project
@@ -54,7 +58,7 @@ else ()
         -Wno-unused-variable
         -Wno-ignored-attributes)
 
-    set(DEBUG_OPTIONS -O2 -fno-omit-frame-pointer -g)
+    set(DEBUG_OPTIONS -O3 -fno-omit-frame-pointer -g)
     set(RELEASE_OPTIONS -O3 -march=native -mtune=native)
     # If the Address Sanitizer library is not available on your platform, you may need to remove ",-lasan" from the below 
     target_link_libraries(RenderProject PUBLIC $<$<CONFIG:Debug>:-Wl,-lasan>)
