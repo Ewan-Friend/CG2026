@@ -65,47 +65,43 @@ void loadScene(int index) {
 
 void handleEvent(SDL_Event event, DrawingWindow &window) {
 	if (event.type == SDL_KEYDOWN) {
-        if (event.key.keysym.sym == SDLK_LEFT) camera.translate(glm::vec3(-cameraStepSize, 0, 0));
+        // TODO: MAKE A HELPER FUNCTION FOR THIS
+        if (event.key.keysym.sym == SDLK_l) {
+            camera.isLookingAt = !camera.isLookingAt; 
+            camera.lookAt(camera.position);
+        }
+        else if (event.key.keysym.sym == SDLK_LEFT) camera.translate(glm::vec3(-cameraStepSize, 0, 0));
         else if (event.key.keysym.sym == SDLK_RIGHT) camera.translate(glm::vec3(cameraStepSize, 0, 0));
         else if (event.key.keysym.sym == SDLK_UP) camera.translate(glm::vec3(0, cameraStepSize, 0));
         else if (event.key.keysym.sym == SDLK_DOWN) camera.translate(glm::vec3(0, -cameraStepSize, 0));
-        else if (event.key.keysym.sym == SDLK_z) camera.translate(glm::vec3(0, 0, -cameraStepSize));
-        else if (event.key.keysym.sym == SDLK_x) camera.translate(glm::vec3(0, 0, cameraStepSize));
+        else if (event.key.keysym.sym == SDLK_MINUS) camera.translate(glm::vec3(0, 0, cameraStepSize));
+        else if (event.key.keysym.sym == SDLK_EQUALS) camera.translate(glm::vec3(0, 0, -cameraStepSize));
         // Pan
-        else if (event.key.keysym.sym == SDLK_j) camera.pan(theta_step);
-        else if (event.key.keysym.sym == SDLK_l) camera.pan(-theta_step);
+        else if (event.key.keysym.sym == SDLK_d) camera.pan(theta_step);
+        else if (event.key.keysym.sym == SDLK_a) camera.pan(-theta_step);
         // Tilt
-        else if (event.key.keysym.sym == SDLK_i) camera.tilt(-theta_step);
-        else if (event.key.keysym.sym == SDLK_k) camera.tilt(theta_step);
+        else if (event.key.keysym.sym == SDLK_w) camera.tilt(-theta_step);
+        else if (event.key.keysym.sym == SDLK_s) camera.tilt(theta_step);
         // Orbit
-        else if (event.key.keysym.sym == SDLK_d) camera.orbitY(-theta_step);
-        else if (event.key.keysym.sym == SDLK_a) camera.orbitY(theta_step);
-        else if (event.key.keysym.sym == SDLK_w) camera.orbitUp(theta_step);
-        else if (event.key.keysym.sym == SDLK_s) camera.orbitUp(-theta_step);
+        else if (event.key.keysym.sym == SDLK_PERIOD) camera.orbitY(-theta_step);
+        else if (event.key.keysym.sym == SDLK_COMMA) camera.orbitY(theta_step);
+        else if (event.key.keysym.sym == SDLK_SLASH) camera.orbitUp(theta_step);
+        else if (event.key.keysym.sym == SDLK_QUOTE) camera.orbitUp(-theta_step);
         else if (event.key.keysym.sym == SDLK_q) camera.reset();
-        else if (event.key.keysym.sym == SDLK_b) raytraceRenderer.lightPos.x -= lightStepSize;
-        else if (event.key.keysym.sym == SDLK_n) raytraceRenderer.lightPos.x += lightStepSize;
-        else if (event.key.keysym.sym == SDLK_g) raytraceRenderer.lightPos.y -= lightStepSize;
-        else if (event.key.keysym.sym == SDLK_t) raytraceRenderer.lightPos.y += lightStepSize;
-		else if (event.key.keysym.sym == SDLK_u) {
-            CanvasPoint v1((rand() % WIDTH), (rand() % HEIGHT));
-            CanvasPoint v2((rand() % WIDTH), (rand() % HEIGHT));
-            CanvasPoint v3((rand() % WIDTH), (rand() % HEIGHT));
-            Colour c((rand() % 256), (rand() % 256), (rand() % 256));
-            RasterisedRenderer::createTriangle(CanvasTriangle(v1, v2, v3), c, window);
-        }
-		else if (event.key.keysym.sym == SDLK_f) {
-            CanvasPoint v1((rand() % WIDTH), (rand() % HEIGHT));
-            CanvasPoint v2((rand() % WIDTH), (rand() % HEIGHT));
-            CanvasPoint v3((rand() % WIDTH), (rand() % HEIGHT));
-            Colour c((rand() % 256), (rand() % 256), (rand() % 256));
-            RasterisedRenderer::createFilled(CanvasTriangle(v1, v2, v3), c, window);
-        } 
+        // Light Positioning
+        else if (event.key.keysym.sym == SDLK_j) raytraceRenderer.lightPos.x -= lightStepSize;
+        else if (event.key.keysym.sym == SDLK_l) raytraceRenderer.lightPos.x += lightStepSize;
+        else if (event.key.keysym.sym == SDLK_k) raytraceRenderer.lightPos.y -= lightStepSize;
+        else if (event.key.keysym.sym == SDLK_i) raytraceRenderer.lightPos.y += lightStepSize;
+        else if (event.key.keysym.sym == SDLK_p) raytraceRenderer.lightPos.z -= lightStepSize;
+        else if (event.key.keysym.sym == SDLK_o) raytraceRenderer.lightPos.z += lightStepSize;
 		else if (event.key.keysym.sym == SDLK_TAB) savingFrames = !savingFrames;
 		else if (event.key.keysym.sym == SDLK_RETURN) window.toggleFullscreen();
+        // Change renderers
         else if (event.key.keysym.sym == SDLK_1) currentRenderer = &raytraceRenderer;
         else if (event.key.keysym.sym == SDLK_2) currentRenderer = &modelRenderer;
         else if (event.key.keysym.sym == SDLK_3) currentRenderer = &wireframeRenderer;
+        // Change shaders
         else if (event.key.keysym.sym == SDLK_4) raytraceRenderer.shading = 
             (raytraceRenderer.shading != RaytraceRenderer::ShadingMethod::Gouraud) ? 
                 raytraceRenderer.shading = RaytraceRenderer::ShadingMethod::Gouraud : 

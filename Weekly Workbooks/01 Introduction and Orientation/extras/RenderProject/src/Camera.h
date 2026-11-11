@@ -1,4 +1,5 @@
 #pragma once
+#include "glm/detail/type_vec.hpp"
 #include <glm/glm.hpp>
 #include <CanvasPoint.h>
 
@@ -14,10 +15,12 @@ public:
     float planeScale = 160.0f;
     /// auto orbiting flag
     bool spinning = false;
+    /// Flag if camera movement defaults too looking at a position
+    bool isLookingAt = true;
 
     static glm::mat3 rotX(float theta);
     static glm::mat3 rotY(float theta);
-    static glm::mat3 lookAt(const glm::vec3 &point, const glm::vec3 &from);
+    static glm::mat3 lookAt(const glm::vec3 &from, const glm::vec3 &point = glm::vec3(0));
 
     void translate(const glm::vec3 &delta);
     void pan(float theta);

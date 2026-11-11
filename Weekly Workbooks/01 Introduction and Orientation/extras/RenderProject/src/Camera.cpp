@@ -5,7 +5,7 @@ extern const int WIDTH;
 extern const int HEIGHT;
 
 /// Look at a point in space
-glm::mat3 Camera::lookAt(const glm::vec3 &point, const glm::vec3 &from) {
+glm::mat3 Camera::lookAt(const glm::vec3 &from, const glm::vec3 &point){
     glm::vec3 forward = glm::normalize(from - point);
     glm::vec3 right = glm::normalize(glm::cross(glm::vec3(0, 1, 0), forward));
     glm::vec3 up = glm::cross(forward, right);
@@ -27,7 +27,10 @@ glm::mat3 Camera::rotY(float t) {
 }
 
 /// Move the camera
-void Camera::translate(const glm::vec3 &delta) { position += delta; }
+void Camera::translate(const glm::vec3 &delta) { 
+    position += delta;
+    if (isLookingAt) orientation = lookAt(position);
+}
 
 /// Rotate the camera
 void Camera::pan(float t)  { orientation = rotY(t) * orientation; }
@@ -36,7 +39,7 @@ void Camera::tilt(float t) { orientation = rotX(t) * orientation; }
 /// Orbit around the Y axis
 void Camera::orbitY(float t) {
     position = rotY(t) * position;
-    orientation = lookAt(glm::vec3(0), position);
+    if (isLookingAt) orientation = lookAt(position);
 }
 
 /// Orbit around the X axis 
@@ -46,7 +49,7 @@ void Camera::orbitUp(float t) {
     glm::vec3 np = position * std::cos(t) - glm::cross(k, position) * std::sin(t);
     if (std::fabs(np.y) < 0.99f * glm::length(np)) {
         position = np;
-        orientation = lookAt(glm::vec3(0), np);
+        if (isLookingAt) orientation = lookAt(np);
     }
 }
 
